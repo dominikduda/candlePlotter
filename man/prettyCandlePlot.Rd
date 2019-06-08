@@ -45,5 +45,5 @@ ggsave(
 }
 It produces following chart:
 \if{html}{\figure{btc_usd_daily.png}{options: width="90\%" alt="btc_usd_daily"}}
-\if{latex}{\figure{btc_usd_daily.pdf}{options: width=20cm}}
+\if{latex}{\figure{btc_usd_daily.png}{options: width=20cm}}
 }
