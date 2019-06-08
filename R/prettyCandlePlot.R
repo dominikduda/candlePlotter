@@ -1,0 +1,59 @@
+prettyCandlePlot <- function(time_series, chart_title = '') {
+  library(ggplot2)
+  chart_data <- time_series
+  chart_data <- transform(chart_data, Date = as.Date(Date))
+  chart_data$chg = ifelse(chart_data['Close'] > chart_data['Open'], "up", "dn")
+  chart_data$flat_bar <- chart_data[, "High"] == chart_data[, "Low"]
+
+  p <- ggplot(chart_data, aes(x = Date))
+  p <- p + theme_bw()
+  p <-
+    p + theme(
+      panel.background = element_rect(fill = 'black'),
+      panel.border = element_blank(),
+      panel.grid.minor = element_blank(),
+      panel.grid.major = element_line(colour = "#121212"),
+      plot.margin = unit(c(10, 0, 0, 32), "pt"),
+      plot.background = element_rect(fill = "black", colour = 'black'),
+      plot.title = element_text(colour = "white"),
+      axis.line = element_line(colour = "white"),
+      axis.text.y = element_text(colour = 'white'),
+      axis.text.x = element_text(
+        colour = 'white',
+        angle = 45,
+        hjust = 1
+      ),
+      axis.ticks.x = element_line(colour = 'white'),
+      axis.ticks.y = element_line(colour = 'white'),
+      axis.ticks.length = unit(5, "pt")
+    )
+  p <-
+    p + geom_linerange(aes(ymin = Low, ymax = High), color = 'white')
+  p <- p + guides(fill = FALSE, colour = FALSE)
+  p <- p + labs(title = chart_title, colour = 'white')
+  p <- p + geom_rect(aes(
+    xmin = Date - 1 / 2 * 0.9,
+    xmax = Date + 1 / 2 * 0.9,
+    ymin = pmin(Open, Close),
+    ymax = pmax(Open, Close),
+    fill = chg
+  ))
+  p <-
+    p + scale_fill_manual(values = c("dn" = "#656565", "up" = "#ededee"))
+  p <-
+    p + scale_x_date(date_breaks = "1 week", date_labels = "%d.%m.%Y")
+  p <-
+    p + scale_y_continuous(position = 'right',
+                           breaks = scales::pretty_breaks(n = 25))
+
+  # Handle special case of drawing a flat bar where OHLC = Open:
+  if (any(chart_data$flat_bar))
+    p <- p + geom_segment(data = chart_data[chart_data$flat_bar,],
+                          aes(
+                            x = Date - 1 / 2 * 0.9,
+                            y = Close,
+                            yend = Close,
+                            xend = Date + 1 / 2 * 0.9
+                          ))
+  return(p)
+}

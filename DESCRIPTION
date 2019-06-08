@@ -1,0 +1,10 @@
+Package: candlePlotter
+Type: Package
+Title: Prints OHLC time series with style
+Version: 0.1.0
+Author: dominikduda
+Description: Returns ggplot2 object so the chart can be further adjusted
+Imports: ggplot2
+License: MIT
+Encoding: UTF-8
+LazyData: true
