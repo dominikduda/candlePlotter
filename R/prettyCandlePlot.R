@@ -1,11 +1,13 @@
+validateColumns <- function(time_series) {
+}
+
 prettyCandlePlot <- function(time_series, chart_title = '') {
   library(ggplot2)
   chart_data <- time_series
-  chart_data <- transform(chart_data, Date = as.Date(Date))
   chart_data$chg = ifelse(chart_data['Close'] > chart_data['Open'], "up", "dn")
   chart_data$flat_bar <- chart_data[, "High"] == chart_data[, "Low"]
 
-  p <- ggplot(chart_data, aes(x = Date))
+  p <- ggplot(chart_data, aes(x = Time))
   p <- p + theme_bw()
   p <-
     p + theme(
@@ -32,8 +34,8 @@ prettyCandlePlot <- function(time_series, chart_title = '') {
   p <- p + guides(fill = FALSE, colour = FALSE)
   p <- p + labs(title = chart_title, colour = 'white')
   p <- p + geom_rect(aes(
-    xmin = Date - 1 / 2 * 0.9,
-    xmax = Date + 1 / 2 * 0.9,
+    xmin = Time - 1 / 2 * 0.9,
+    xmax = Time + 1 / 2 * 0.9,
     ymin = pmin(Open, Close),
     ymax = pmax(Open, Close),
     fill = chg
@@ -50,10 +52,10 @@ prettyCandlePlot <- function(time_series, chart_title = '') {
   if (any(chart_data$flat_bar))
     p <- p + geom_segment(data = chart_data[chart_data$flat_bar,],
                           aes(
-                            x = Date - 1 / 2 * 0.9,
+                            x = Time - 1 / 2 * 0.9,
                             y = Close,
                             yend = Close,
-                            xend = Date + 1 / 2 * 0.9
+                            xend = Time + 1 / 2 * 0.9
                           ))
   return(p)
 }

@@ -12,7 +12,7 @@ Raises exception if passed data frame columns does not match.
 Plotting a chart and saving it from a string:
 \code{
 raw_data <- "
-Date Open High Low Close
+Time Open High Low Close
 2018-08-30 7050.267 7068.232 6740.648 6985.976
 2018-08-31 6982.225 7075.417 6915.935 7046.783
 2018-09-01 7040.911 7257.571 7030.790 7193.122
@@ -32,6 +32,8 @@ Date Open High Low Close
 2018-09-15 6488.870 6561.979 6480.306 6524.671"
 
 data_for_chart <- read.table(text = raw_data, header = TRUE)
+
+data_for_chart <- transform(data_for_chart, Time = as.Date(Time))
 
 plot <- prettyCandlePlot(data_for_chart, chart_title = 'BTCUSD')
 
