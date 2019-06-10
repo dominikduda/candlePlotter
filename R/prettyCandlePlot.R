@@ -7,11 +7,7 @@ validate_input <- function(time_series) {
     stop("Time series must contain 'Time', 'Open', 'High', 'Low' and 'Close' columns.")
   }
   time <- time_series[,c('Time')]
-  is_posixct <- test_posixct(time)
-  is_date <- test_date(time)
-  if (!is_posixct && !is_date) {
-    stop("The 'Date' column must be either Date or POSIXct.")
-  }
+  assert_posixct(time)
 }
 
 timeframe <- function(time_series) {
@@ -69,7 +65,7 @@ prettyCandlePlot <- function(time_series, chart_title = '') {
   p <-
     p + scale_fill_manual(values = c("dn" = "#656565", "up" = "#ededee"))
   p <-
-    p + scale_x_datetime(date_breaks = "1 week", date_labels = "%d.%m.%Y")
+    p + scale_x_datetime(breaks = scales::pretty_breaks(n = 20), date_labels = "")
   p <-
     p + scale_y_continuous(position = 'right',
                            breaks = scales::pretty_breaks(n = 25))
