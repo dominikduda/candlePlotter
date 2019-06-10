@@ -2,11 +2,13 @@
 \alias{prettyCandlePlot}
 \title{Plot OHLC chart}
 \usage{
-Call the function with a data frame contatining columns matching \code{c('Date', 'Open', 'High', 'Low', 'Close')}
+Call the function with a data frame contatining columns matching \code{c('Time', 'Open', 'High', 'Low', 'Close')}
+
+The 'Time' column must be of POSIXct type.
 }
 \description{
 Returns ggplot2 object, so there is possibility to extend it further.
-Raises exception if passed data frame columns does not match.
+Validates input.
 }
 \examples{
 Plotting a chart and saving it from a string:
@@ -33,7 +35,7 @@ Time Open High Low Close
 
 data_for_chart <- read.table(text = raw_data, header = TRUE)
 
-data_for_chart <- transform(data_for_chart, Time = as.Date(Time))
+data_for_chart <- transform(data_for_chart, Time = as.POSIXct(Time))
 
 plot <- prettyCandlePlot(data_for_chart, chart_title = 'BTCUSD')
 

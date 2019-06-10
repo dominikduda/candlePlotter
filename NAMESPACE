@@ -1,2 +1,3 @@
 import(ggplot2)
+import(checkmate)
 export(prettyCandlePlot)

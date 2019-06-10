@@ -1,8 +1,34 @@
-validateColumns <- function(time_series) {
+validate_input <- function(time_series) {
+  assert_data_frame(time_series)
+  if (
+    !test_subset(c('Time', 'Open', 'High', 'Low', 'Close'),
+                 colnames(time_series))
+  ) {
+    stop("Time series must contain 'Time', 'Open', 'High', 'Low' and 'Close' columns.")
+  }
+  time <- time_series[,c('Time')]
+  is_posixct <- test_posixct(time)
+  is_date <- test_date(time)
+  if (!is_posixct && !is_date) {
+    stop("The 'Date' column must be either Date or POSIXct.")
+  }
+}
+
+timeframe <- function(time_series) {
+  times <- time_series[, c('Time')]
+  time_1 <- times[1]
+  time_2 <- times[2]
+  time_frame <- as.numeric(difftime(time_2, time_1, units = 'secs'))
+  return(time_frame)
 }
 
 prettyCandlePlot <- function(time_series, chart_title = '') {
   library(ggplot2)
+  library(checkmate)
+
+  validate_input(time_series)
+
+  candle_duration <- timeframe(time_series)
   chart_data <- time_series
   chart_data$chg = ifelse(chart_data['Close'] > chart_data['Open'], "up", "dn")
   chart_data$flat_bar <- chart_data[, "High"] == chart_data[, "Low"]
@@ -34,8 +60,8 @@ prettyCandlePlot <- function(time_series, chart_title = '') {
   p <- p + guides(fill = FALSE, colour = FALSE)
   p <- p + labs(title = chart_title, colour = 'white')
   p <- p + geom_rect(aes(
-    xmin = Time - 1 / 2 * 0.9,
-    xmax = Time + 1 / 2 * 0.9,
+    xmin = Time - candle_duration / 2 * 0.9,
+    xmax = Time + candle_duration / 2 * 0.9,
     ymin = pmin(Open, Close),
     ymax = pmax(Open, Close),
     fill = chg
@@ -43,7 +69,7 @@ prettyCandlePlot <- function(time_series, chart_title = '') {
   p <-
     p + scale_fill_manual(values = c("dn" = "#656565", "up" = "#ededee"))
   p <-
-    p + scale_x_date(date_breaks = "1 week", date_labels = "%d.%m.%Y")
+    p + scale_x_datetime(date_breaks = "1 week", date_labels = "%d.%m.%Y")
   p <-
     p + scale_y_continuous(position = 'right',
                            breaks = scales::pretty_breaks(n = 25))
