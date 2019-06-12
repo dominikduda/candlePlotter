@@ -10,11 +10,18 @@ validate_input <- function(time_series, under_candles_layers) {
 }
 
 timeframe <- function(time_series) {
+  most_popular_diff <- NULL
   times <- time_series[, c('Time')]
-  time_1 <- times[1]
-  time_2 <- times[2]
-  time_frame <- as.numeric(difftime(time_2, time_1, units = 'secs'))
-  return(time_frame)
+  candles_time_diffs <- c()
+  for (index in 2:length(times)) {
+    time_1 <- times[index - 1]
+    time_2 <- times[index]
+    diff <- as.numeric(difftime(time_2, time_1, units = 'secs'))
+    candles_time_diffs <- c(diff, candles_time_diffs)
+    most_popular_diff <- as.numeric(names(sort(table(candles_time_diffs), decreasing = TRUE))[1])
+  }
+
+  return(most_popular_diff)
 }
 
 prettyCandlePlot <-
