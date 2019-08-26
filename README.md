@@ -15,9 +15,7 @@ Description:
      Returns ggplot2 object, so there is possibility to extend it
      further.
 
-     Validates input. You can pass 'under_candles_layers' list argument
-     with list of objects created by 'layer()'. Those will be plotted
-     under the candlesticks.
+     Validates input.
 
 Arguments:
 
