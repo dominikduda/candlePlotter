@@ -1,3 +1,5 @@
+<img src="https://raw.githubusercontent.com/dominikduda/config_files/master/dd_logo_blue_bg.png" width="300" height="300" />
+
 # candlePlotter
 Use `?prettyCandlePlot` for instructions. It gives follwing output:
 ```
