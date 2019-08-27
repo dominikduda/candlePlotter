@@ -7,8 +7,6 @@
   \item{under_candles_layers}{A vector of ggplot layers to print under candles}
 }
 \description{
-The data frame must contain following columns vector: c('Time', 'Open', 'High', 'Low', 'Close')
-
 Returns ggplot2 object, so there is possibility to extend it further.
 
 Validates input.

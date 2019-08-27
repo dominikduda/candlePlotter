@@ -9,9 +9,6 @@ Plot OHLC chart
 
 Description:
 
-     The data frame must contain following columns vector: c('Time',
-     'Open', 'High', 'Low', 'Close')
-
      Returns ggplot2 object, so there is possibility to extend it
      further.
 
